@@ -3359,3 +3359,997 @@ select.input {
     grid-template-columns: 1fr 1fr;
   }
 }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   GNANI AI VOICE — VOICE RECORDER PANEL
+   ═══════════════════════════════════════════════════════════════ */
+
+.voice-recorder-panel {
+  background: linear-gradient(135deg, #f0fdf9 0%, #e6f7f4 100%);
+  border: 1.5px solid var(--teal);
+  border-radius: 14px;
+  padding: 18px 20px;
+  margin-top: 14px;
+}
+
+/* Input tab switcher */
+.voice-input-tabs {
+  display: flex;
+  background: #f0f4f8;
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 20px;
+  gap: 2px;
+}
+
+.voice-input-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-muted);
+  background: transparent;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.voice-input-tab.active {
+  background: white;
+  color: var(--teal);
+  box-shadow: var(--shadow-sm);
+}
+
+.voice-input-tab:hover:not(.active) {
+  background: rgba(255,255,255,0.5);
+}
+
+/* Voice action buttons */
+.voice-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+  transition: all 0.2s;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.voice-action-btn.record {
+  background: var(--teal);
+  color: white;
+  border-color: var(--teal);
+}
+
+.voice-action-btn.record:hover:not(:disabled) {
+  background: var(--teal-dark, #0d7a6b);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.voice-action-btn.stop {
+  background: #ef4444;
+  color: white;
+  border-color: #ef4444;
+  animation: recording-pulse 1.2s ease-in-out infinite;
+}
+
+.voice-action-btn.convert {
+  background: white;
+  color: var(--navy);
+  border-color: var(--navy);
+}
+
+.voice-action-btn.convert:hover {
+  background: var(--navy);
+  color: white;
+}
+
+.voice-action-btn.discard {
+  background: transparent;
+  color: var(--ink-muted);
+  border-color: var(--ink-subtle);
+}
+
+.voice-action-btn.discard:hover {
+  background: #fee2e2;
+  border-color: #ef4444;
+  color: #dc2626;
+}
+
+.voice-action-btn.processing {
+  background: #eff6ff;
+  color: #2563eb;
+  border-color: #bfdbfe;
+  cursor: default;
+}
+
+.voice-action-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.voice-action-btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Recording indicator dot */
+.recording-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: white;
+  animation: blink-dot 0.8s ease-in-out infinite;
+}
+
+@keyframes blink-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* Recording timer */
+.recording-timer {
+  font-family: monospace;
+  font-size: 13px;
+  opacity: 0.85;
+  letter-spacing: 0.05em;
+}
+
+/* Voice status message */
+.voice-status-msg {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin-top: 12px;
+  padding: 9px 13px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.voice-status-msg.info {
+  background: var(--teal-light);
+  color: var(--teal);
+}
+
+.voice-status-msg.recording {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.voice-status-msg.error {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fca5a5;
+}
+
+/* Pulsing dot for recording status */
+.pulse-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ef4444;
+  flex-shrink: 0;
+  margin-top: 3px;
+  animation: blink-dot 0.8s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SPINNER UTILITIES
+   ═══════════════════════════════════════════════════════════════ */
+
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+.spinner-xs {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border: 1.5px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   GNANI AI — TRANSLATION PANEL
+   ═══════════════════════════════════════════════════════════════ */
+
+.translation-panel {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 18px 20px;
+  margin-top: 14px;
+}
+
+.tp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tp-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.tp-orig-lang-badge {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--teal);
+  background: var(--teal-light);
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+.tp-text-box {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  min-height: 60px;
+}
+
+.tp-text-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--ink-muted);
+  margin-bottom: 8px;
+}
+
+.tp-text-content {
+  font-size: 15px;
+  line-height: 1.65;
+  color: rgba(17,45,56,.85);
+  margin: 0;
+}
+
+.tp-loading-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #2563eb;
+  font-size: 14px;
+}
+
+.tp-controls {
+  display: flex;
+  gap: 14px;
+  align-items: flex-end;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.tp-tts-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  flex-wrap: wrap;
+}
+
+.tp-tts-label {
+  font-size: 13px;
+  color: var(--ink-muted);
+  flex: 1;
+  min-width: 140px;
+}
+
+.btn-tts-active {
+  background: #eff6ff !important;
+  border-color: #3b82f6 !important;
+  color: #2563eb !important;
+}
+
+.tp-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin-top: 10px;
+  padding: 9px 13px;
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #dc2626;
+  line-height: 1.5;
+}
+
+/* Compact translation panel (dashboard cards) */
+.tp-compact {
+  border-top: 1px solid var(--ink-subtle);
+  padding-top: 10px;
+}
+
+.tp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.tp-btn.listen {
+  background: var(--teal-light);
+  color: var(--teal);
+  border: 1px solid var(--teal);
+}
+
+.tp-btn.listen.active {
+  background: #fff7ed;
+  color: #c2410c;
+  border-color: #fed7aa;
+}
+
+.tp-btn.listen:hover:not(:disabled) {
+  background: var(--teal);
+  color: white;
+}
+
+.tp-btn.translate {
+  background: white;
+  color: var(--navy);
+  border: 1px solid var(--ink-subtle);
+}
+
+.tp-btn.translate:hover:not(:disabled) {
+  background: var(--navy);
+  color: white;
+}
+
+.tp-btn.ghost {
+  background: transparent;
+  color: var(--ink-muted);
+  border: 1px solid var(--ink-subtle);
+}
+
+.tp-btn.ghost:hover {
+  background: var(--cream);
+}
+
+.tp-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.tp-translated-text.compact {
+  margin-top: 10px;
+  padding: 10px 12px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(17,45,56,.85);
+}
+
+.tp-lang-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #059669;
+  margin-bottom: 5px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   EMERGENCY INSTRUCTIONS PANEL (Authority Dashboard)
+   ═══════════════════════════════════════════════════════════════ */
+
+.ei-panel {
+  background: white;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  overflow: hidden;
+  margin-top: 20px;
+}
+
+.ei-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  background: linear-gradient(135deg, var(--navy) 0%, #1e3a4a 100%);
+  color: white;
+}
+
+.ei-panel-title {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.ei-panel-body {
+  padding: 18px;
+}
+
+.ei-instruction-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+}
+
+.ei-instruction-card:last-child {
+  margin-bottom: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   INPUT TAB SWITCHER (Report form type/voice toggle)
+   ═══════════════════════════════════════════════════════════════ */
+
+.input-method-tabs {
+  display: flex;
+  background: #f1f5f9;
+  border-radius: 12px;
+  padding: 4px;
+  gap: 2px;
+  margin-bottom: 16px;
+}
+
+.input-method-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 11px 10px;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-muted);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.input-method-tab.active {
+  background: white;
+  color: var(--teal);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.input-method-tab:hover:not(.active) {
+  background: rgba(255,255,255,0.6);
+  color: var(--navy);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   GNANI AI VOICE — VOICE RECORDER PANEL
+   ═══════════════════════════════════════════════════════════════ */
+
+.voice-recorder-panel {
+  background: linear-gradient(135deg, #f0fdf9 0%, #e6f7f4 100%);
+  border: 1.5px solid var(--teal);
+  border-radius: 14px;
+  padding: 18px 20px;
+  margin-top: 14px;
+}
+
+/* Input tab switcher */
+.voice-input-tabs {
+  display: flex;
+  background: #f0f4f8;
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 20px;
+  gap: 2px;
+}
+
+.voice-input-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-muted);
+  background: transparent;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.voice-input-tab.active {
+  background: white;
+  color: var(--teal);
+  box-shadow: var(--shadow-sm);
+}
+
+.voice-input-tab:hover:not(.active) {
+  background: rgba(255,255,255,0.5);
+}
+
+/* Voice action buttons */
+.voice-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+  transition: all 0.2s;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.voice-action-btn.record {
+  background: var(--teal);
+  color: white;
+  border-color: var(--teal);
+}
+
+.voice-action-btn.record:hover:not(:disabled) {
+  background: var(--teal-dark, #0d7a6b);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.voice-action-btn.stop {
+  background: #ef4444;
+  color: white;
+  border-color: #ef4444;
+  animation: recording-pulse 1.2s ease-in-out infinite;
+}
+
+.voice-action-btn.convert {
+  background: white;
+  color: var(--navy);
+  border-color: var(--navy);
+}
+
+.voice-action-btn.convert:hover {
+  background: var(--navy);
+  color: white;
+}
+
+.voice-action-btn.discard {
+  background: transparent;
+  color: var(--ink-muted);
+  border-color: var(--ink-subtle);
+}
+
+.voice-action-btn.discard:hover {
+  background: #fee2e2;
+  border-color: #ef4444;
+  color: #dc2626;
+}
+
+.voice-action-btn.processing {
+  background: #eff6ff;
+  color: #2563eb;
+  border-color: #bfdbfe;
+  cursor: default;
+}
+
+.voice-action-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.voice-action-btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Recording indicator dot */
+.recording-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: white;
+  animation: blink-dot 0.8s ease-in-out infinite;
+}
+
+@keyframes blink-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* Recording timer */
+.recording-timer {
+  font-family: monospace;
+  font-size: 13px;
+  opacity: 0.85;
+  letter-spacing: 0.05em;
+}
+
+/* Voice status message */
+.voice-status-msg {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin-top: 12px;
+  padding: 9px 13px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.voice-status-msg.info {
+  background: var(--teal-light);
+  color: var(--teal);
+}
+
+.voice-status-msg.recording {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.voice-status-msg.error {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fca5a5;
+}
+
+/* Pulsing dot for recording status */
+.pulse-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ef4444;
+  flex-shrink: 0;
+  margin-top: 3px;
+  animation: blink-dot 0.8s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SPINNER UTILITIES
+   ═══════════════════════════════════════════════════════════════ */
+
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+.spinner-xs {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border: 1.5px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   GNANI AI — TRANSLATION PANEL
+   ═══════════════════════════════════════════════════════════════ */
+
+.translation-panel {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 18px 20px;
+  margin-top: 14px;
+}
+
+.tp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tp-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.tp-orig-lang-badge {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--teal);
+  background: var(--teal-light);
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+.tp-text-box {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  min-height: 60px;
+}
+
+.tp-text-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--ink-muted);
+  margin-bottom: 8px;
+}
+
+.tp-text-content {
+  font-size: 15px;
+  line-height: 1.65;
+  color: rgba(17,45,56,.85);
+  margin: 0;
+}
+
+.tp-loading-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #2563eb;
+  font-size: 14px;
+}
+
+.tp-controls {
+  display: flex;
+  gap: 14px;
+  align-items: flex-end;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.tp-tts-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  flex-wrap: wrap;
+}
+
+.tp-tts-label {
+  font-size: 13px;
+  color: var(--ink-muted);
+  flex: 1;
+  min-width: 140px;
+}
+
+.btn-tts-active {
+  background: #eff6ff !important;
+  border-color: #3b82f6 !important;
+  color: #2563eb !important;
+}
+
+.tp-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin-top: 10px;
+  padding: 9px 13px;
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #dc2626;
+  line-height: 1.5;
+}
+
+/* Compact translation panel (dashboard cards) */
+.tp-compact {
+  border-top: 1px solid var(--ink-subtle);
+  padding-top: 10px;
+}
+
+.tp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.tp-btn.listen {
+  background: var(--teal-light);
+  color: var(--teal);
+  border: 1px solid var(--teal);
+}
+
+.tp-btn.listen.active {
+  background: #fff7ed;
+  color: #c2410c;
+  border-color: #fed7aa;
+}
+
+.tp-btn.listen:hover:not(:disabled) {
+  background: var(--teal);
+  color: white;
+}
+
+.tp-btn.translate {
+  background: white;
+  color: var(--navy);
+  border: 1px solid var(--ink-subtle);
+}
+
+.tp-btn.translate:hover:not(:disabled) {
+  background: var(--navy);
+  color: white;
+}
+
+.tp-btn.ghost {
+  background: transparent;
+  color: var(--ink-muted);
+  border: 1px solid var(--ink-subtle);
+}
+
+.tp-btn.ghost:hover {
+  background: var(--cream);
+}
+
+.tp-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.tp-translated-text.compact {
+  margin-top: 10px;
+  padding: 10px 12px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(17,45,56,.85);
+}
+
+.tp-lang-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #059669;
+  margin-bottom: 5px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   EMERGENCY INSTRUCTIONS PANEL (Authority Dashboard)
+   ═══════════════════════════════════════════════════════════════ */
+
+.ei-panel {
+  background: white;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  overflow: hidden;
+  margin-top: 20px;
+}
+
+.ei-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  background: linear-gradient(135deg, var(--navy) 0%, #1e3a4a 100%);
+  color: white;
+}
+
+.ei-panel-title {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.ei-panel-body {
+  padding: 18px;
+}
+
+.ei-instruction-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+}
+
+.ei-instruction-card:last-child {
+  margin-bottom: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   INPUT TAB SWITCHER (Report form type/voice toggle)
+   ═══════════════════════════════════════════════════════════════ */
+
+.input-method-tabs {
+  display: flex;
+  background: #f1f5f9;
+  border-radius: 12px;
+  padding: 4px;
+  gap: 2px;
+  margin-bottom: 16px;
+}
+
+.input-method-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 11px 10px;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-muted);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.input-method-tab.active {
+  background: white;
+  color: var(--teal);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.input-method-tab:hover:not(.active) {
+  background: rgba(255,255,255,0.6);
+  color: var(--navy);
+}

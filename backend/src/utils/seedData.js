@@ -1,0 +1,326 @@
+import Incident from "../models/Incident.js";
+import Call from "../models/Call.js";
+import Organization from "../models/Organization.js";
+
+export const SEED_INCIDENTS = [
+  {
+    id: "RQ-3840211",
+    reference: "RQ-3840211",
+    type: "Building collapse",
+    location: "Lal Bahadur Nagar, Ward 3",
+    area: "North district",
+    priority: "critical",
+    status: "Needs verification",
+    description: "Partial building collapse reported. Multiple people may be trapped under debris. Witness says at least 4 people were inside.",
+    reportedAt: new Date(Date.now() - 8 * 60000),
+    reporter: "+91 98765 43210",
+    duplicate: false,
+    team: null,
+    callStatus: "Pending",
+    verified: false,
+    confidence: 88,
+    aiReason: "Report explicitly states people trapped under debris — highest threat-to-life indicator. Collapse events have narrow intervention windows. Single credible report with witness corroboration warrants critical priority.",
+    missing: ["Exact number of trapped persons", "Structural condition of adjacent buildings"],
+    weather: "Heavy rain in area",
+    lat: 28.0,
+    lng: 77.0,
+    public: true,
+    confirmations: 9,
+  },
+  {
+    id: "RQ-3840199",
+    reference: "RQ-3840199",
+    type: "Flood",
+    location: "River Belt Colony, Ward 7",
+    area: "River belt",
+    priority: "critical",
+    status: "Verified",
+    description: "Floodwater entering homes rapidly. Elderly residents unable to evacuate. Water level rising approx 2 feet per hour.",
+    reportedAt: new Date(Date.now() - 22 * 60000),
+    reporter: "+91 87654 32109",
+    duplicate: false,
+    team: "Team Alpha",
+    callStatus: "Completed",
+    verified: true,
+    confidence: 94,
+    aiReason: "Multiple corroborating reports. Elderly residents with mobility limitations cannot self-evacuate. Rising water rate of 2ft/hour threatens life within hours. Current rainfall intensifies urgency.",
+    missing: [],
+    weather: "Active rainfall: 48mm/hr",
+    lat: 28.2,
+    lng: 77.3,
+    public: true,
+    confirmations: 14,
+  },
+  {
+    id: "RQ-3840187",
+    reference: "RQ-3840187",
+    type: "Landslide",
+    location: "Hill Road, Chota Simla Colony",
+    area: "North district",
+    priority: "high",
+    status: "Under Review",
+    description: "Landslide blocking highway. One vehicle appears to be buried. Unclear if passengers are inside.",
+    reportedAt: new Date(Date.now() - 41 * 60000),
+    reporter: null,
+    duplicate: false,
+    team: null,
+    callStatus: "Pending",
+    verified: false,
+    confidence: 71,
+    aiReason: "Possible trapped vehicle occupants — life-threatening if confirmed. High uncertainty warrants urgent verification. Unstable terrain may prevent rescue access; specialist team required.",
+    missing: ["Confirmation of vehicle occupancy", "Road access status"],
+    weather: "Wet terrain after 6hrs rain",
+    lat: 28.5,
+    lng: 77.1,
+    public: true,
+    confirmations: 6,
+  },
+  {
+    id: "RQ-3840175",
+    reference: "RQ-3840175",
+    type: "Medical emergency",
+    location: "Central Market, Block C",
+    area: "Central",
+    priority: "high",
+    status: "Response in Progress",
+    description: "Person collapsed. Bystanders performing CPR. No ambulance available in area due to road blockage.",
+    reportedAt: new Date(Date.now() - 55 * 60000),
+    reporter: "+91 77654 32108",
+    duplicate: false,
+    team: "Team Bravo",
+    callStatus: "Completed",
+    verified: true,
+    confidence: 92,
+    aiReason: "Cardiac event requiring immediate medical intervention. CPR in progress indicates critical window. Road blockage compounds urgency — air or alternate route dispatch may be necessary.",
+    missing: ["Exact patient condition", "Alternative access routes"],
+    weather: "Clear",
+    lat: 28.3,
+    lng: 77.4,
+    public: true,
+    confirmations: 11,
+  },
+  {
+    id: "RQ-3840162",
+    reference: "RQ-3840162",
+    type: "Fire",
+    location: "Industrial zone, Shed 14",
+    area: "South district",
+    priority: "high",
+    status: "Needs verification",
+    description: "Large fire visible from multiple blocks. Black smoke. Factory appears to be unmanned but chemical storage reported nearby.",
+    reportedAt: new Date(Date.now() - 78 * 60000),
+    reporter: null,
+    duplicate: false,
+    team: null,
+    callStatus: "Not required",
+    verified: false,
+    confidence: 65,
+    aiReason: "Potential chemical hazard with unknown substances. Multiple witness reports corroborate fire presence. Unmanned facility reduces immediate life risk but chemical exposure and spread risk remain high.",
+    missing: ["Chemical inventory", "Fire spread rate", "Whether anyone present"],
+    weather: "Wind: 22km/h NE",
+    lat: 28.6,
+    lng: 77.5,
+    public: true,
+    confirmations: 7,
+  },
+  {
+    id: "RQ-3840150",
+    reference: "RQ-3840150",
+    type: "Flood",
+    location: "Nehru Park Area",
+    area: "Central",
+    priority: "medium",
+    status: "Monitoring",
+    description: "Low-lying park area flooded. No residences affected yet but water level rising slowly.",
+    reportedAt: new Date(Date.now() - 120 * 60000),
+    reporter: null,
+    duplicate: false,
+    team: null,
+    callStatus: "Not required",
+    verified: true,
+    confidence: 80,
+    aiReason: "No immediate life threat confirmed. Water level monitored; precautionary watch warranted given upstream rainfall patterns. May escalate to High if residential areas become affected.",
+    missing: ["Upstream water gauge readings"],
+    weather: "Moderate rain expected",
+    lat: 28.1,
+    lng: 77.2,
+    public: true,
+    confirmations: 3,
+  },
+  {
+    id: "RQ-3840143",
+    reference: "RQ-3840143",
+    type: "Other",
+    location: "Sector 12, Main Road",
+    area: "East district",
+    priority: "medium",
+    status: "Needs verification",
+    description: "Fallen tree blocking entire road. No injuries reported. Emergency vehicles may be impacted.",
+    reportedAt: new Date(Date.now() - 180 * 60000),
+    reporter: null,
+    duplicate: true,
+    team: null,
+    callStatus: "Not required",
+    verified: false,
+    confidence: 60,
+    aiReason: "Road obstruction without immediate life risk. Impact is access disruption for emergency response. Flagged as potential duplicate of report RQ-3840138.",
+    missing: ["Whether utilities/power lines affected"],
+    weather: "Wind damage likely",
+    lat: 28.4,
+    lng: 77.6,
+    public: true,
+    confirmations: 4,
+  },
+  {
+    id: "RQ-3840130",
+    reference: "RQ-3840130",
+    type: "Landslide",
+    location: "North Hill Access Road",
+    area: "North district",
+    priority: "low",
+    status: "Resolved",
+    description: "Minor debris on side of road. Cleared by morning shift crew. Monitoring for further movement.",
+    reportedAt: new Date(Date.now() - 300 * 60000),
+    reporter: null,
+    duplicate: false,
+    team: "Team Delta",
+    callStatus: "Not required",
+    verified: true,
+    confidence: 95,
+    aiReason: "Incident resolved. Debris cleared. Geotechnical team on routine monitoring. No further action required unless conditions worsen.",
+    missing: [],
+    weather: "Stable",
+    lat: 28.7,
+    lng: 77.0,
+    public: true,
+    confirmations: 5,
+  },
+];
+
+export const SEED_USER_CALLS = [
+  {
+    id: "CL-90231",
+    reportRef: "RQ-3840211",
+    incidentType: "Building collapse",
+    mode: "ai",
+    status: "missed",
+    at: new Date(Date.now() - 42 * 60000),
+    durationSec: null,
+    reason: "Confirm how many people are trapped and the condition of adjacent buildings",
+    transcript: [],
+    reviewed: false,
+  },
+  {
+    id: "CL-90218",
+    reportRef: "RQ-3840175",
+    incidentType: "Medical emergency",
+    mode: "ivr",
+    status: "received",
+    at: new Date(Date.now() - 3 * 3600000),
+    durationSec: 96,
+    reason: "Confirm patient condition and an alternate ambulance route",
+    transcript: [
+      { q: "Is the person still unresponsive?", a: "Yes — breathing but unresponsive." },
+      { q: "Is the main road still blocked for the ambulance?", a: "Yes, use Market Lane 4 instead." },
+    ],
+    reviewed: false,
+  },
+  {
+    id: "CL-90204",
+    reportRef: "RQ-3840150",
+    incidentType: "Flood",
+    mode: "ai",
+    status: "received",
+    at: new Date(Date.now() - 9 * 3600000),
+    durationSec: 142,
+    reason: "Check whether floodwater has reached residential blocks",
+    transcript: [
+      { q: "Has water entered any homes in Nehru Park area?", a: "Not yet — only the low-lying park is flooded." },
+      { q: "Is the water level rising right now?", a: "Rising slowly, roughly two inches per hour." },
+    ],
+    reviewed: true,
+  },
+  {
+    id: "CL-90190",
+    reportRef: "RQ-3840143",
+    incidentType: "Obstruction — fallen tree",
+    mode: "ivr",
+    status: "missed",
+    at: new Date(Date.now() - 26 * 3600000),
+    durationSec: null,
+    reason: "Confirm whether power lines are affected by the fallen tree",
+    transcript: [],
+    reviewed: false,
+  },
+];
+
+export const SEED_ORGANIZATIONS = [
+  {
+    name: "State NDRF Unit 3",
+    type: "Government disaster team",
+    email: "ndrf3@ndrf.gov.in",
+    status: "approved",
+    role: "Disaster management authority",
+  },
+  {
+    name: "District Control Room",
+    type: "Government disaster team",
+    email: "dcr@district.gov.in",
+    status: "approved",
+    role: "Control-room operator",
+  },
+  {
+    name: "City Fire Brigade #12",
+    type: "Emergency services",
+    email: "cfb12@fire.gov.in",
+    status: "approved",
+    role: "Fire and rescue responder",
+  },
+  {
+    name: "Helping Hands NGO",
+    type: "NGO",
+    email: "coord@hh.org",
+    status: "approved",
+    role: "NGO coordinator",
+  },
+  {
+    name: "Green Valley NGO",
+    type: "NGO",
+    email: "coord@greenvalley.org",
+    status: "pending",
+    role: "NGO coordinator",
+  },
+];
+
+/**
+ * Seeds MongoDB collections with real disaster incidents if the collection is empty
+ */
+export const seedInitialDatabase = async () => {
+  try {
+    const incidentCount = await Incident.countDocuments();
+    if (incidentCount === 0) {
+      console.log("🌱 Seeding MongoDB with initial real incidents...");
+      await Incident.insertMany(SEED_INCIDENTS);
+      console.log(`✅ ${SEED_INCIDENTS.length} incidents seeded to MongoDB Atlas.`);
+    }
+
+    const callCount = await Call.countDocuments();
+    if (callCount === 0) {
+      console.log("🌱 Seeding MongoDB with initial follow-up calls...");
+      await Call.insertMany(SEED_USER_CALLS);
+      console.log(`✅ ${SEED_USER_CALLS.length} calls seeded.`);
+    }
+
+    const orgCount = await Organization.countDocuments();
+    if (orgCount === 0) {
+      console.log("🌱 Seeding MongoDB with authorized organizations...");
+      await Organization.insertMany(SEED_ORGANIZATIONS);
+      console.log(`✅ ${SEED_ORGANIZATIONS.length} organizations seeded.`);
+    }
+  } catch (error) {
+    console.warn("⚠️ Database auto-seed note:", error.message);
+  }
+};
+
+export default seedInitialDatabase;
+
